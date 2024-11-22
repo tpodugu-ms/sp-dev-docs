@@ -624,7 +624,25 @@ Operators specify the type of operation to perform. Valid operator values includ
 - `>=`
 
 **Unary operators** - The standard unary operators that expect only one operand are:
-
+- **toArray()**: Used along with forEach, toArray parses the input and returns the array described by the string.
+  - `"txtContent": "=toArray('[1,2,3,4]')"` results in _1,2,3,4_
+  - `"txtContent": "=toArray(1)"` results in _1_
+  - `"txtContent": "=toArray('')"` results in _''_
+  - `"txtContent": "=toArray('{\"key1\":\"value\"}')"` results in _[{key:value}]_
+  - Below example parses the json array and iterate using forEach
+```JSON
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "div",
+  "children": [
+    {
+      "forEach": "json in toArray('[{\"key\":\"value\"}]')",
+      "elmType": "div",
+      "txtContent": "[$json.key]"
+    }
+  ]
+}
+```
 - `toString()`: returns a string representing the object
   - `"txtContent": "=toString(45)"` results in _"45"_
 - `Number()`: returns the numeric value, if the operand isn't a number, NaN is returned
@@ -1210,6 +1228,23 @@ This also works with field name:
 {
   "elmType": "div",
   "txtContent": "[$FieldName.displayValue]"
+}
+```
+
+### Choices
+
+Choice column can use Choices property along with forEach to iterate over Choice options.
+```JSON
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/sp/v2/column-formatting.schema.json",
+  "elmType": "div",
+  "children": [
+    {
+      "forEach": "choice in [!FieldName.Choices]",
+      "elmType": "div",
+      "txtContent": "[$choice]"
+    }
+  ]
 }
 ```
 
